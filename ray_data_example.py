@@ -45,6 +45,5 @@ if __name__ == "__main__":
   model_ref = ray.put(ViTForImageClassification.from_pretrained('google/vit-base-patch16-224'))
   dataset = dataset.map(Predictor, fn_constructor_args=[model_ref, processor_ref], concurrency=2)
   dataset = dataset.map(write_results)
-  dataset.materialize()
   end = datetime.now()
   print(f"Total execution time: {end-start}")
