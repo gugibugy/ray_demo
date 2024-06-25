@@ -39,7 +39,7 @@ def write_results(row: Dict[str, Any]):
 
 if __name__ == "__main__":
   start = datetime.now()
-  dataset = ray.data.read_text("local://images_to_download.txt")
+  dataset = ray.data.read_text("local://images_to_download_1.txt")
   dataset = dataset.map(get_image)
   processor_ref = ray.put(ViTImageProcessor.from_pretrained('google/vit-base-patch16-224'))
   model_ref = ray.put(ViTForImageClassification.from_pretrained('google/vit-base-patch16-224'))
