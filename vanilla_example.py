@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
   start = datetime.now()
   for prediction in predictions:
-    destination = os.path.join("/data/results_vanilla", f"{prediction[1]}.txt")
+    destination = os.path.join("/data/ray_demo/results_vanilla", f"{prediction[1]}.txt")
     write_results(prediction[0], destination)
   end = datetime.now()
   print(f"Write out results execution Time: {end-start}")
