@@ -1,0 +1,14 @@
+name: ray_demo
+channels:
+  - defaults
+  - pytorch
+dependencies:
+  - python=3.10
+  - pytorch
+  - torchaudio
+  - torchvision
+  - pip
+  - pip:
+    - transformers
+    - pillow
+    - ray[default]
