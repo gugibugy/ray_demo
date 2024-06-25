@@ -38,6 +38,7 @@ def write_results(results, destination):
     output.write(results)
 
 if __name__ == "__main__":
+  start = datetime.now()
   with open("images_to_download.txt") as image_list:
     image_futures = []
     start = datetime.now()
@@ -45,25 +46,19 @@ if __name__ == "__main__":
       image_futures.append(get_image.remote(image_src))
 
   images = ray.get(image_futures)
-  end = datetime.now()
-  print(f"Get image execution time: {end-start}")
 
   processor_ref = ray.put(ViTImageProcessor.from_pretrained('google/vit-base-patch16-224'))
   model_ref = ray.put(ViTForImageClassification.from_pretrained('google/vit-base-patch16-224'))
   actor_pool = ActorPool(Predictor.remote(model_ref, processor_ref) for _ in range(4))
-  start = datetime.now()
   for image, image_name in images:
     actor_pool.submit(lambda actor, value: actor.predict.remote(value), (image, image_name))
 
   predictions = []
   while actor_pool.has_next():
       predictions.append(actor_pool.get_next())
-  end = datetime.now()
-  print(f"Inference execution time: {end-start}")
 
-  start = datetime.now()
   for prediction in predictions:
     destination = os.path.join("/data/ray_demo/results_remote", f"{prediction[1]}.txt")
     write_results.remote(prediction[0], destination)
   end = datetime.now()
-  print(f"Write out results execution Time: {end-start}")
+  print(f"Total execution time: {end-start}")

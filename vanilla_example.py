@@ -33,26 +33,20 @@ def write_results(results, destination):
     output.write(results)
 
 if __name__ == "__main__":
+  start = datetime.now()
   with open("images_to_download.txt") as image_list:
     images = []
-    start = datetime.now()
     for image_src in image_list.read().splitlines():
       images.append(get_image(image_src))
-    end = datetime.now()
-  print(f"Get Image Execution Time: {end-start}")
 
   predictor = Predictor(ViTForImageClassification.from_pretrained('google/vit-base-patch16-224'),
                         ViTImageProcessor.from_pretrained('google/vit-base-patch16-224'))
   predictions = []
-  start =  datetime.now()
   for image in images:
     predictions.append(predictor.predict(image))
-  end = datetime.now()
-  print(f"Inference Execution Time: {end-start}")
 
-  start = datetime.now()
   for prediction in predictions:
     destination = os.path.join("/data/ray_demo/results_vanilla", f"{prediction[1]}.txt")
     write_results(prediction[0], destination)
   end = datetime.now()
-  print(f"Write out results execution Time: {end-start}")
+  print(f"Total execution time: {end-start}")

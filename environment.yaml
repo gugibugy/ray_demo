@@ -12,3 +12,4 @@ dependencies:
     - transformers
     - pillow
     - ray[default]
+    - ray[data]
