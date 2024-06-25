@@ -31,7 +31,7 @@ class Predictor:
 
 
 def write_results(row: Dict[str, Any]):
-  destination = os.path.join("/data/ray_demo/results_vanilla", f"{row['image_name']}.txt")
+  destination = os.path.join("/data/ray_demo/results_ray_data", f"{row['image_name']}.txt")
   with open(destination, "w") as output:
     output.write(row["label"])
   return row
